@@ -25,21 +25,15 @@ class Audit(models.Model):
     the Redis cache entry expires.
     """
 
-    audit_id = models.CharField(
-        max_length=32, primary_key=True, default=generate_audit_id, editable=False
-    )
+    audit_id = models.CharField(max_length=32, primary_key=True, default=generate_audit_id, editable=False)
     raw_url = models.TextField(help_text="URL exactly as submitted, pre-normalization")
     normalized_url = models.CharField(
         max_length=2048,
         db_index=True,
         help_text="Lowercased host, stripped default port, sorted query params",
     )
-    request_id = models.CharField(
-        max_length=64, help_text="Correlates to structured log lines (TRD §9)"
-    )
-    result = models.JSONField(
-        help_text="Full result: availability/performance/seo_signals/security_headers"
-    )
+    request_id = models.CharField(max_length=64, help_text="Correlates to structured log lines (TRD §9)")
+    result = models.JSONField(help_text="Full result: availability/performance/seo_signals/security_headers")
     status = models.CharField(
         max_length=16,
         choices=[("completed", "Completed"), ("failed", "Failed")],
@@ -51,9 +45,7 @@ class Audit(models.Model):
     class Meta:
         db_table = "audits"
         indexes = [
-            models.Index(
-                fields=["-created_at"], name="idx_audits_created_at"
-            ),
+            models.Index(fields=["-created_at"], name="idx_audits_created_at"),
         ]
         ordering = ["-created_at"]
 
@@ -75,9 +67,7 @@ class Monitor(models.Model):
         ("DEGRADED", "Degraded"),
     ]
 
-    monitor_id = models.CharField(
-        max_length=32, primary_key=True, default=generate_monitor_id, editable=False
-    )
+    monitor_id = models.CharField(max_length=32, primary_key=True, default=generate_monitor_id, editable=False)
     owner_key = models.CharField(
         max_length=64,
         db_index=True,
@@ -85,9 +75,7 @@ class Monitor(models.Model):
     )
     raw_url = models.TextField(help_text="URL as submitted")
     normalized_url = models.CharField(max_length=2048)
-    interval_seconds = models.IntegerField(
-        help_text="Check interval (min: MONITOR_MIN_INTERVAL_SECONDS)"
-    )
+    interval_seconds = models.IntegerField(help_text="Check interval (min: MONITOR_MIN_INTERVAL_SECONDS)")
     webhook_url = models.TextField(help_text="Alert destination URL")
     latency_threshold_ms = models.IntegerField(
         null=True,
@@ -99,9 +87,7 @@ class Monitor(models.Model):
         choices=STATE_CHOICES,
         default="PENDING_FIRST_CHECK",
     )
-    last_checked_at = models.DateTimeField(
-        null=True, blank=True, help_text="NULL until first scheduled check"
-    )
+    last_checked_at = models.DateTimeField(null=True, blank=True, help_text="NULL until first scheduled check")
     next_check_at = models.DateTimeField(
         null=True,
         blank=True,
@@ -134,9 +120,7 @@ class Monitor(models.Model):
         from django.core.exceptions import ValidationError
 
         if self.interval_seconds < settings.MONITOR_MIN_INTERVAL_SECONDS:
-            raise ValidationError(
-                f"Interval must be at least {settings.MONITOR_MIN_INTERVAL_SECONDS}s"
-            )
+            raise ValidationError(f"Interval must be at least {settings.MONITOR_MIN_INTERVAL_SECONDS}s")
 
 
 class MonitorCheck(models.Model):
@@ -153,15 +137,9 @@ class MonitorCheck(models.Model):
         to_field="monitor_id",
         db_column="monitor_id",
     )
-    state = models.CharField(
-        max_length=24, help_text="State snapshot as of this check"
-    )
-    response_time_ms = models.IntegerField(
-        null=True, blank=True, help_text="NULL on outright failure"
-    )
-    status_code = models.IntegerField(
-        null=True, blank=True, help_text="NULL on total unreachability"
-    )
+    state = models.CharField(max_length=24, help_text="State snapshot as of this check")
+    response_time_ms = models.IntegerField(null=True, blank=True, help_text="NULL on outright failure")
+    status_code = models.IntegerField(null=True, blank=True, help_text="NULL on total unreachability")
     error_code = models.CharField(
         max_length=32,
         null=True,

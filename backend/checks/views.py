@@ -280,17 +280,13 @@ class MonitorListCreateView(APIView):
         # Validate interval (FR-11)
         interval = data["interval_seconds"]
         if interval < settings.MONITOR_MIN_INTERVAL_SECONDS:
-            raise IntervalTooShort(
-                f"Minimum interval is {settings.MONITOR_MIN_INTERVAL_SECONDS} seconds."
-            )
+            raise IntervalTooShort(f"Minimum interval is {settings.MONITOR_MIN_INTERVAL_SECONDS} seconds.")
 
         # Validate webhook URL (same SSRF rules — App Flow §3)
         webhook_url = data["webhook_url"]
 
         # Check for duplicate (unique constraint: owner_key + normalized_url)
-        if Monitor.objects.filter(
-            owner_key=client_key, normalized_url=normalized_url
-        ).exists():
+        if Monitor.objects.filter(owner_key=client_key, normalized_url=normalized_url).exists():
             from .exceptions import APIException
 
             class DuplicateMonitor(APIException):
@@ -455,9 +451,7 @@ class MonitorHistoryView(APIView):
             settings.MONITOR_HISTORY_MAX,
         )
 
-        checks = MonitorCheck.objects.filter(
-            monitor=monitor
-        ).order_by("-checked_at")[:limit]
+        checks = MonitorCheck.objects.filter(monitor=monitor).order_by("-checked_at")[:limit]
 
         serializer = MonitorCheckSerializer(checks, many=True)
 
@@ -497,9 +491,7 @@ class MonitorAlertsView(APIView):
         request_id = get_current_request_id() or "req_unknown"
 
         # Active alert monitors (state in DOWN or DEGRADED)
-        active_alert_monitors = Monitor.objects.filter(
-            owner_key=client_key, state__in=["DOWN", "DEGRADED"]
-        )
+        active_alert_monitors = Monitor.objects.filter(owner_key=client_key, state__in=["DOWN", "DEGRADED"])
 
         alerts = []
         for mon in active_alert_monitors:

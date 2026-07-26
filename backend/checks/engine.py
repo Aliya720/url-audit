@@ -101,17 +101,11 @@ def fetch_url(url: str, request_id: str) -> dict:
                 break
 
             except requests.exceptions.Timeout:
-                raise TargetTimeout(
-                    f"Target site timed out after {timeout}s."
-                )
+                raise TargetTimeout(f"Target site timed out after {timeout}s.")
             except requests.exceptions.ConnectionError as e:
-                raise TargetUnreachable(
-                    f"Unable to reach the target site: {str(e)[:200]}"
-                )
+                raise TargetUnreachable(f"Unable to reach the target site: {str(e)[:200]}")
             except (requests.exceptions.TooManyRedirects, requests.exceptions.RequestException) as e:
-                raise TargetUnreachable(
-                    f"Error fetching target site: {str(e)[:200]}"
-                )
+                raise TargetUnreachable(f"Error fetching target site: {str(e)[:200]}")
             except URLNotAllowed:
                 # Re-raise SSRF errors from redirect validation
                 raise
@@ -303,131 +297,152 @@ def generate_fix_suggestions(
 
     # Security
     if not security_headers.get("hsts"):
-        suggestions.append({
-            "id": "SEC_HSTS_MISSING",
-            "severity": "CRITICAL",
-            "category": "Security",
-            "title": "Enable HTTP Strict Transport Security (HSTS)",
-            "description": (
-                "HSTS header is missing. Without HSTS, connection upgrades"
-                " to HTTPS can be stripped by attackers."
-            ),
-            "recommendation": (
-                "Configure your server to return"
-                " 'Strict-Transport-Security: max-age=31536000; includeSubDomains'."
-            ),
-        })
+        suggestions.append(
+            {
+                "id": "SEC_HSTS_MISSING",
+                "severity": "CRITICAL",
+                "category": "Security",
+                "title": "Enable HTTP Strict Transport Security (HSTS)",
+                "description": (
+                    "HSTS header is missing. Without HSTS, connection upgrades"
+                    " to HTTPS can be stripped by attackers."
+                ),
+                "recommendation": (
+                    "Configure your server to return"
+                    " 'Strict-Transport-Security: max-age=31536000; includeSubDomains'."
+                ),
+            }
+        )
 
     if not security_headers.get("csp"):
-        suggestions.append({
-            "id": "SEC_CSP_MISSING",
-            "severity": "CRITICAL",
-            "category": "Security",
-            "title": "Configure Content Security Policy (CSP)",
-            "description": (
-                "Content-Security-Policy header is missing, exposing"
-                " the site to Cross-Site Scripting (XSS) attacks."
-            ),
-            "recommendation": "Define a CSP header restricting allowed script, style, and frame sources.",
-        })
+        suggestions.append(
+            {
+                "id": "SEC_CSP_MISSING",
+                "severity": "CRITICAL",
+                "category": "Security",
+                "title": "Configure Content Security Policy (CSP)",
+                "description": (
+                    "Content-Security-Policy header is missing, exposing"
+                    " the site to Cross-Site Scripting (XSS) attacks."
+                ),
+                "recommendation": "Define a CSP header restricting allowed script, style, and frame sources.",
+            }
+        )
 
     if not security_headers.get("x_frame_options"):
-        suggestions.append({
-            "id": "SEC_XFRAME_MISSING",
-            "severity": "WARNING",
-            "category": "Security",
-            "title": "Add X-Frame-Options Header",
-            "description": "X-Frame-Options header is missing, allowing potential clickjacking attacks in frames.",
-            "recommendation": "Set 'X-Frame-Options: SAMEORIGIN' or 'DENY' in web server response headers.",
-        })
+        suggestions.append(
+            {
+                "id": "SEC_XFRAME_MISSING",
+                "severity": "WARNING",
+                "category": "Security",
+                "title": "Add X-Frame-Options Header",
+                "description": "X-Frame-Options header is missing, allowing potential clickjacking attacks in frames.",
+                "recommendation": "Set 'X-Frame-Options: SAMEORIGIN' or 'DENY' in web server response headers.",
+            }
+        )
 
     if not security_headers.get("x_content_type_options"):
-        suggestions.append({
-            "id": "SEC_XCTO_MISSING",
-            "severity": "WARNING",
-            "category": "Security",
-            "title": "Add X-Content-Type-Options Header",
-            "description": "X-Content-Type-Options header is missing, allowing browser MIME-sniffing.",
-            "recommendation": "Set 'X-Content-Type-Options: nosniff' header.",
-        })
+        suggestions.append(
+            {
+                "id": "SEC_XCTO_MISSING",
+                "severity": "WARNING",
+                "category": "Security",
+                "title": "Add X-Content-Type-Options Header",
+                "description": "X-Content-Type-Options header is missing, allowing browser MIME-sniffing.",
+                "recommendation": "Set 'X-Content-Type-Options: nosniff' header.",
+            }
+        )
 
     # Performance
     rt = performance.get("response_time_ms", 0)
     if rt > 1000:
-        suggestions.append({
-            "id": "PERF_HIGH_LATENCY",
-            "severity": "WARNING",
-            "category": "Performance",
-            "title": "High Response Latency",
-            "description": f"Server response time was {rt}ms (recommended benchmark is under 500ms).",
-            "recommendation": "Optimize backend queries, enable page/object caching, or place assets behind a CDN.",
-        })
+        suggestions.append(
+            {
+                "id": "PERF_HIGH_LATENCY",
+                "severity": "WARNING",
+                "category": "Performance",
+                "title": "High Response Latency",
+                "description": f"Server response time was {rt}ms (recommended benchmark is under 500ms).",
+                "recommendation": "Optimize backend queries, enable page/object caching, or place assets behind a CDN.",
+            }
+        )
 
     encoding = network_diagnostics.get("content_encoding", "identity").lower()
     if encoding == "identity" or not encoding:
-        suggestions.append({
-            "id": "PERF_NO_COMPRESSION",
-            "severity": "INFO",
-            "category": "Performance",
-            "title": "Enable HTTP Compression (Gzip / Brotli)",
-            "description": "Response content was delivered uncompressed.",
-            "recommendation": "Enable Gzip or Brotli compression on your origin server/reverse proxy.",
-        })
+        suggestions.append(
+            {
+                "id": "PERF_NO_COMPRESSION",
+                "severity": "INFO",
+                "category": "Performance",
+                "title": "Enable HTTP Compression (Gzip / Brotli)",
+                "description": "Response content was delivered uncompressed.",
+                "recommendation": "Enable Gzip or Brotli compression on your origin server/reverse proxy.",
+            }
+        )
 
     # SEO
     if not seo_signals.get("title_present"):
-        suggestions.append({
-            "id": "SEO_TITLE_MISSING",
-            "severity": "CRITICAL",
-            "category": "SEO",
-            "title": "Add HTML Title Tag",
-            "description": "The page lacks a <title> tag, preventing proper indexing by search engines.",
-            "recommendation": "Add a descriptive <title> tag inside the <head> element.",
-        })
+        suggestions.append(
+            {
+                "id": "SEO_TITLE_MISSING",
+                "severity": "CRITICAL",
+                "category": "SEO",
+                "title": "Add HTML Title Tag",
+                "description": "The page lacks a <title> tag, preventing proper indexing by search engines.",
+                "recommendation": "Add a descriptive <title> tag inside the <head> element.",
+            }
+        )
     else:
         title_len = seo_signals.get("title_length", 0)
         if title_len < 30 or title_len > 60:
-            suggestions.append({
-                "id": "SEO_TITLE_LENGTH",
-                "severity": "INFO",
-                "category": "SEO",
-                "title": "Optimize Title Tag Length",
-                "description": (
-                    f"Title tag length is {title_len} characters."
-                    " Recommended target is 30 to 60 characters."
-                ),
-                "recommendation": "Adjust page title text to fit standard search snippet displays (30–60 characters).",
-            })
+            suggestions.append(
+                {
+                    "id": "SEO_TITLE_LENGTH",
+                    "severity": "INFO",
+                    "category": "SEO",
+                    "title": "Optimize Title Tag Length",
+                    "description": (
+                        f"Title tag length is {title_len} characters." " Recommended target is 30 to 60 characters."
+                    ),
+                    "recommendation": "Adjust page title text to fit standard search snippet displays (30–60 characters).",
+                }
+            )
 
     if not seo_signals.get("meta_description_present"):
-        suggestions.append({
-            "id": "SEO_META_DESC_MISSING",
-            "severity": "WARNING",
-            "category": "SEO",
-            "title": "Add Meta Description Tag",
-            "description": "Meta description is missing.",
-            "recommendation": "Add <meta name='description' content='...'> providing a summary of page content.",
-        })
+        suggestions.append(
+            {
+                "id": "SEO_META_DESC_MISSING",
+                "severity": "WARNING",
+                "category": "SEO",
+                "title": "Add Meta Description Tag",
+                "description": "Meta description is missing.",
+                "recommendation": "Add <meta name='description' content='...'> providing a summary of page content.",
+            }
+        )
 
     h1_cnt = seo_signals.get("h1_count", 0)
     if h1_cnt == 0:
-        suggestions.append({
-            "id": "SEO_H1_MISSING",
-            "severity": "WARNING",
-            "category": "SEO",
-            "title": "Add Primary Heading (H1)",
-            "description": "No <h1> heading tags were found.",
-            "recommendation": "Include a single <h1> tag containing the principal page topic.",
-        })
+        suggestions.append(
+            {
+                "id": "SEO_H1_MISSING",
+                "severity": "WARNING",
+                "category": "SEO",
+                "title": "Add Primary Heading (H1)",
+                "description": "No <h1> heading tags were found.",
+                "recommendation": "Include a single <h1> tag containing the principal page topic.",
+            }
+        )
     elif h1_cnt > 1:
-        suggestions.append({
-            "id": "SEO_H1_MULTIPLE",
-            "severity": "INFO",
-            "category": "SEO",
-            "title": "Multiple H1 Headings Detected",
-            "description": f"Found {h1_cnt} <h1> tags on the page.",
-            "recommendation": "Use a single <h1> for the page title and structural <h2>–<h6> tags for subheadings.",
-        })
+        suggestions.append(
+            {
+                "id": "SEO_H1_MULTIPLE",
+                "severity": "INFO",
+                "category": "SEO",
+                "title": "Multiple H1 Headings Detected",
+                "description": f"Found {h1_cnt} <h1> tags on the page.",
+                "recommendation": "Use a single <h1> for the page title and structural <h2>–<h6> tags for subheadings.",
+            }
+        )
 
     return suggestions
 
@@ -461,22 +476,16 @@ def run_check(url: str, request_id: str) -> dict:
     }
 
     # Analyze SEO signals
-    seo_signals = analyze_seo_signals(
-        fetch_result["content"], fetch_result["headers"]
-    )
+    seo_signals = analyze_seo_signals(fetch_result["content"], fetch_result["headers"])
 
     # Analyze security headers
     security_headers = analyze_security_headers(fetch_result["headers"])
 
     # Network diagnostics
-    network_diagnostics = extract_network_diagnostics(
-        fetch_result["headers"], fetch_result["final_url"]
-    )
+    network_diagnostics = extract_network_diagnostics(fetch_result["headers"], fetch_result["final_url"])
 
     # Health score
-    score_data = calculate_health_score(
-        availability, performance, seo_signals, security_headers
-    )
+    score_data = calculate_health_score(availability, performance, seo_signals, security_headers)
 
     # Fix suggestions
     fix_suggestions = generate_fix_suggestions(

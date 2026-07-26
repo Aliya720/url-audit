@@ -101,9 +101,7 @@ def _prune_history(monitor_id: str):
         .values_list("id", flat=True)[:max_history]
     )
     deleted_count, _ = (
-        MonitorCheck.objects.filter(monitor_id=monitor_id)
-        .exclude(id__in=list(check_ids_to_keep))
-        .delete()
+        MonitorCheck.objects.filter(monitor_id=monitor_id).exclude(id__in=list(check_ids_to_keep)).delete()
     )
     if deleted_count:
         logger.info(

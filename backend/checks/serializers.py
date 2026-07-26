@@ -43,9 +43,7 @@ class MonitorRequestSerializer(serializers.Serializer):
     url = serializers.URLField(required=True)
     interval_seconds = serializers.IntegerField(required=True, min_value=1)
     webhook_url = serializers.URLField(required=True)
-    latency_threshold_ms = serializers.IntegerField(
-        required=False, allow_null=True, min_value=1, default=None
-    )
+    latency_threshold_ms = serializers.IntegerField(required=False, allow_null=True, min_value=1, default=None)
 
 
 class MonitorResponseSerializer(serializers.ModelSerializer):

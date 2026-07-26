@@ -27,9 +27,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "raw_url",
-                    models.TextField(
-                        help_text="URL exactly as submitted, pre-normalization"
-                    ),
+                    models.TextField(help_text="URL exactly as submitted, pre-normalization"),
                 ),
                 (
                     "normalized_url",
@@ -48,9 +46,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "result",
-                    models.JSONField(
-                        help_text="Full result: availability/performance/seo_signals/security_headers"
-                    ),
+                    models.JSONField(help_text="Full result: availability/performance/seo_signals/security_headers"),
                 ),
                 (
                     "status",
@@ -69,9 +65,7 @@ class Migration(migrations.Migration):
             options={
                 "db_table": "audits",
                 "ordering": ["-created_at"],
-                "indexes": [
-                    models.Index(fields=["-created_at"], name="idx_audits_created_at")
-                ],
+                "indexes": [models.Index(fields=["-created_at"], name="idx_audits_created_at")],
             },
         ),
         migrations.CreateModel(
@@ -99,9 +93,7 @@ class Migration(migrations.Migration):
                 ("normalized_url", models.CharField(max_length=2048)),
                 (
                     "interval_seconds",
-                    models.IntegerField(
-                        help_text="Check interval (min: MONITOR_MIN_INTERVAL_SECONDS)"
-                    ),
+                    models.IntegerField(help_text="Check interval (min: MONITOR_MIN_INTERVAL_SECONDS)"),
                 ),
                 ("webhook_url", models.TextField(help_text="Alert destination URL")),
                 (
@@ -154,15 +146,9 @@ class Migration(migrations.Migration):
             options={
                 "db_table": "monitors",
                 "ordering": ["-created_at"],
-                "indexes": [
-                    models.Index(
-                        fields=["normalized_url"], name="idx_monitors_normalized_url"
-                    )
-                ],
+                "indexes": [models.Index(fields=["normalized_url"], name="idx_monitors_normalized_url")],
                 "constraints": [
-                    models.UniqueConstraint(
-                        fields=("owner_key", "normalized_url"), name="unique_owner_url"
-                    )
+                    models.UniqueConstraint(fields=("owner_key", "normalized_url"), name="unique_owner_url")
                 ],
             },
         ),
@@ -180,21 +166,15 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "state",
-                    models.CharField(
-                        help_text="State snapshot as of this check", max_length=24
-                    ),
+                    models.CharField(help_text="State snapshot as of this check", max_length=24),
                 ),
                 (
                     "response_time_ms",
-                    models.IntegerField(
-                        blank=True, help_text="NULL on outright failure", null=True
-                    ),
+                    models.IntegerField(blank=True, help_text="NULL on outright failure", null=True),
                 ),
                 (
                     "status_code",
-                    models.IntegerField(
-                        blank=True, help_text="NULL on total unreachability", null=True
-                    ),
+                    models.IntegerField(blank=True, help_text="NULL on total unreachability", null=True),
                 ),
                 (
                     "error_code",

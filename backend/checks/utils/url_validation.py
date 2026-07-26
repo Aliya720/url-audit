@@ -44,9 +44,7 @@ def validate_url(raw_url: str) -> ParseResult:
         raise InvalidURL("URL must include a scheme (http:// or https://).")
 
     if parsed.scheme.lower() not in ALLOWED_SCHEMES:
-        raise InvalidURL(
-            f"Unsupported scheme '{parsed.scheme}'. Only HTTP and HTTPS are allowed."
-        )
+        raise InvalidURL(f"Unsupported scheme '{parsed.scheme}'. Only HTTP and HTTPS are allowed.")
 
     if not parsed.hostname:
         raise InvalidURL("URL must include a valid hostname.")
@@ -111,9 +109,7 @@ def check_ssrf(hostname: str) -> list:
     try:
         results = socket.getaddrinfo(hostname, None, socket.AF_UNSPEC, socket.SOCK_STREAM)
     except socket.gaierror:
-        raise URLNotAllowed(
-            f"Unable to resolve hostname '{hostname}'. DNS lookup failed."
-        )
+        raise URLNotAllowed(f"Unable to resolve hostname '{hostname}'. DNS lookup failed.")
 
     if not results:
         raise URLNotAllowed(f"No addresses found for hostname '{hostname}'.")
@@ -138,9 +134,7 @@ def check_ssrf(hostname: str) -> list:
                     "reason": "private/loopback/link-local/reserved",
                 },
             )
-            raise URLNotAllowed(
-                "This URL resolves to a private or internal address and cannot be checked."
-            )
+            raise URLNotAllowed("This URL resolves to a private or internal address and cannot be checked.")
 
         # Explicit check for cloud metadata endpoint
         if ip_str in ("169.254.169.254", "fd00::1"):
@@ -152,9 +146,7 @@ def check_ssrf(hostname: str) -> list:
                     "reason": "cloud_metadata_endpoint",
                 },
             )
-            raise URLNotAllowed(
-                "This URL resolves to a cloud metadata endpoint and cannot be checked."
-            )
+            raise URLNotAllowed("This URL resolves to a cloud metadata endpoint and cannot be checked.")
 
         resolved_ips.append(ip_str)
 

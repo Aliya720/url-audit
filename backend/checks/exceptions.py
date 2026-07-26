@@ -145,9 +145,7 @@ def pulsewatch_exception_handler(exc, context):
             message = "; ".join(str(e) for e in exc.detail)
         else:
             message = str(exc.detail)
-        return _build_error_response(
-            "INVALID_URL", message, status.HTTP_400_BAD_REQUEST
-        )
+        return _build_error_response("INVALID_URL", message, status.HTTP_400_BAD_REQUEST)
 
     # Handle our custom API exceptions
     if isinstance(exc, APIException):

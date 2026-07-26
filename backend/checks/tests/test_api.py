@@ -108,6 +108,7 @@ class TestAuditCreateAPI:
     def test_private_ip_rejected(self, mock_ssrf, api_client):
         """400 URL_NOT_ALLOWED — SSRF protection. FR-1."""
         from checks.exceptions import URLNotAllowed
+
         mock_ssrf.side_effect = URLNotAllowed("Private IP")
 
         resp = api_client.post(
@@ -125,6 +126,7 @@ class TestAuditCreateAPI:
     def test_target_timeout(self, mock_ssrf, mock_release, mock_acquire, api_client):
         """504 TARGET_TIMEOUT — FR-2."""
         import requests as req_lib
+
         responses.add(
             responses.GET,
             "https://slow-site.example.com/",
@@ -146,6 +148,7 @@ class TestAuditCreateAPI:
     def test_target_unreachable(self, mock_ssrf, mock_release, mock_acquire, api_client):
         """502 TARGET_UNREACHABLE — DNS failure / connection refused."""
         import requests as req_lib
+
         responses.add(
             responses.GET,
             "https://down-site.example.com/",
