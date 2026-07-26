@@ -1,0 +1,42 @@
+.error-banner {
+  padding: var(--space-md);
+  background: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.error-icon {
+  color: var(--color-error);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  line-height: 1.6;
+}
+
+.error-content {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.error-message {
+  color: var(--color-error);
+  font-size: 0.9rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.error-retry-btn {
+  font-size: 0.8rem;
+  padding: 4px 12px;
+}

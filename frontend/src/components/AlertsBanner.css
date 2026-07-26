@@ -1,0 +1,88 @@
+.alerts-banner {
+  background-color: var(--error-container);
+  border: 1px solid var(--error);
+  border-radius: var(--radius-xl);
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.alerts-banner-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(186, 26, 26, 0.2);
+}
+
+.alerts-banner-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--on-error-container);
+  font-size: 15px;
+}
+
+.alerts-banner-icon {
+  color: var(--error);
+  font-size: 20px;
+}
+
+.alerts-banner-dismiss {
+  background: transparent;
+  border: none;
+  color: var(--on-error-container);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-sm);
+  transition: opacity var(--transition-fast);
+}
+
+.alerts-banner-dismiss:hover {
+  opacity: 0.7;
+}
+
+.alerts-banner-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.alerts-banner-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface-container-lowest);
+  padding: 10px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--outline-variant);
+  gap: 12px;
+}
+
+.alerts-banner-item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.alerts-banner-url {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--on-surface);
+  word-break: break-all;
+}
+
+.alerts-banner-reason {
+  font-size: 13px;
+  color: var(--on-surface-variant);
+}
+
+.alerts-banner-link {
+  font-size: 13px;
+  padding: 6px 12px;
+}

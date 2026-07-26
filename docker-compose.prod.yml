@@ -1,0 +1,128 @@
+# Production compose file.
+#
+# handoff.md referenced this file as already existing — it didn't (verified
+# by direct inspection during review). Created for real here, so that claim
+# is now true.
+#
+# This is a STANDALONE file, not a merge override — run it INSTEAD of
+# docker-compose.yml, not alongside it:
+#
+#   npm --prefix frontend run build   # rebuild dist/ first — see note below
+#   docker-compose -f docker-compose.prod.yml up --build -d
+#
+# IMPORTANT: this project serves the frontend via a bind mount of the
+# locally-built ./frontend/dist directory (see docker-compose.yml), not a
+# build step inside Docker. That means `dist/` must be built and committed
+# (or built on the server) BEFORE bringing this up — nothing here rebuilds
+# it automatically. Verified during review: the currently-committed dist/
+# matches a fresh `npm run build` byte-for-byte, so it's not stale as of
+# this review — but there's no CI/deploy-time check enforcing that going
+# forward, so re-run the build before every deploy that touches frontend/src.
+#
+# What's different from docker-compose.yml, and why:
+#
+# 1. db/redis no longer publish ports to the host. The dev file maps
+#    5432/6379 to the host for local convenience (connecting a DB client
+#    from your laptop). On a public VPS that means Postgres and Redis are
+#    reachable from the internet unless the firewall blocks them — and the
+#    default local-dev credentials (postgres/postgres) make that a real
+#    risk. Services reach each other by name on the Docker network
+#    regardless; only host-level convenience needed the port mapping.
+#
+# 2. Gunicorn uses gevent workers with a much higher connection count
+#    instead of 4 default sync workers. The app's own concurrency gate
+#    (MAX_CONCURRENT_CHECKS, default 50) allows up to 50 checks in flight,
+#    but 4 sync Gunicorn workers can only have ~4 requests in flight at the
+#    WSGI layer regardless of what the semaphore would permit. The workload
+#    is I/O-bound (blocking outbound HTTP fetches), so gevent workers let
+#    far more requests be in flight per process — this is the single
+#    biggest gap between the "500 concurrent burst" Task B target and what
+#    the dev compose file could actually sustain.
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "127.0.0.1:8080:80"
+      # Add 443 + a TLS server block in nginx.conf once Certbot has issued
+      # a real certificate.
+    depends_on:
+      - web
+    volumes:
+      - ./frontend/dist:/usr/share/nginx/html:ro
+      - static_files:/app/staticfiles
+    restart: unless-stopped
+
+  web:
+    build: ./backend
+    command: >
+      gunicorn pulsewatch.wsgi:application
+      --bind 0.0.0.0:8000
+      --worker-class gevent
+      --workers 4
+      --worker-connections 250
+      --timeout 30
+      --access-logfile -
+      --error-logfile -
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - static_files:/app/staticfiles
+    restart: unless-stopped
+
+  worker:
+    build: ./backend
+    command: celery -A pulsewatch worker -l info --concurrency=4
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  beat:
+    build: ./backend
+    command: celery -A pulsewatch beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-pulsewatch}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # No `ports:` — not published to the host. See note above.
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # No `ports:` — not published to the host. See note above.
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  static_files:
