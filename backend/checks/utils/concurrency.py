@@ -87,4 +87,3 @@ def release_slot(request_id: str) -> None:
         )
     except Exception:
         pass
-

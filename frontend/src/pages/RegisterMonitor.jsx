@@ -1,5 +1,5 @@
 /**
- * Register a Monitor screen — SiteGuard Design Spec
+ * Register a Monitor screen — PulseWatch Design Spec
  * Target URL, interval selector pills, webhook endpoint, latency threshold
  */
 import { useState } from 'react'

@@ -1,5 +1,5 @@
 /**
- * Monitor Detail + History screen — SiteGuard Monitor Detail Spec
+ * Monitor Detail + History screen — PulseWatch Monitor Detail Spec
  * Current state card, check frequency metadata, check history table, and delete monitor action
  */
 import { useState, useEffect } from 'react'

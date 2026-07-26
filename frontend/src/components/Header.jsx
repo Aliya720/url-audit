@@ -28,7 +28,7 @@ function Header() {
         <div className="header-left">
           <NavLink to="/" className="header-logo" id="header-logo">
             <span className="material-symbols-outlined logo-icon">verified_user</span>
-            <span className="logo-text">SiteGuard</span>
+            <span className="logo-text">PulseWatch</span>
           </NavLink>
 
           <nav className="header-nav" id="header-nav" aria-label="Main navigation">

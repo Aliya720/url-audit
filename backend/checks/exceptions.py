@@ -8,7 +8,6 @@ from datetime import datetime, timezone
 from rest_framework import status
 from rest_framework.exceptions import (
     APIException,
-    NotFound,
     Throttled,
     ValidationError,
 )

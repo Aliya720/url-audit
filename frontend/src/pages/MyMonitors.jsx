@@ -1,5 +1,5 @@
 /**
- * My Monitors / Admin Dashboard — SiteGuard Design Spec
+ * My Monitors / Admin Dashboard — PulseWatch Design Spec
  * Summary counters, search filter, domain list with state badges & response times
  */
 import { useState, useEffect, useMemo } from 'react'

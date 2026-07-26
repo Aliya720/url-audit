@@ -4,10 +4,10 @@
 
 import pytest
 from datetime import datetime, timezone
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from checks.models import Monitor, MonitorCheck
-from checks.tasks import _compute_state, _prune_history, run_monitor_check
+from checks.tasks import _compute_state, _prune_history
 
 
 @pytest.fixture
@@ -178,4 +178,3 @@ class TestMonitorAlertsView:
         assert data["data"]["active_alert_count"] == 1
         assert data["data"]["alerts"][0]["monitor_id"] == mock_monitor.monitor_id
         assert data["data"]["alerts"][0]["state"] == "DOWN"
-

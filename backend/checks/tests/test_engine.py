@@ -1,8 +1,6 @@
 # Tests for the Check Engine — TRD §3 steps 4-6
 # Verifies SEO signal and security header analysis
 
-import pytest
-
 from checks.engine import (
     analyze_security_headers,
     analyze_seo_signals,
@@ -152,4 +150,3 @@ class TestNetworkDiagnostics:
         assert diag["content_encoding"] == "br"
         assert diag["is_https"] is True
         assert diag["headers_count"] == 3
-

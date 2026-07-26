@@ -308,8 +308,14 @@ def generate_fix_suggestions(
             "severity": "CRITICAL",
             "category": "Security",
             "title": "Enable HTTP Strict Transport Security (HSTS)",
-            "description": "HSTS header is missing. Without HSTS, connection upgrades to HTTPS can be stripped by attackers.",
-            "recommendation": "Configure your server to return 'Strict-Transport-Security: max-age=31536000; includeSubDomains'.",
+            "description": (
+                "HSTS header is missing. Without HSTS, connection upgrades"
+                " to HTTPS can be stripped by attackers."
+            ),
+            "recommendation": (
+                "Configure your server to return"
+                " 'Strict-Transport-Security: max-age=31536000; includeSubDomains'."
+            ),
         })
 
     if not security_headers.get("csp"):
@@ -318,7 +324,10 @@ def generate_fix_suggestions(
             "severity": "CRITICAL",
             "category": "Security",
             "title": "Configure Content Security Policy (CSP)",
-            "description": "Content-Security-Policy header is missing, exposing the site to Cross-Site Scripting (XSS) attacks.",
+            "description": (
+                "Content-Security-Policy header is missing, exposing"
+                " the site to Cross-Site Scripting (XSS) attacks."
+            ),
             "recommendation": "Define a CSP header restricting allowed script, style, and frame sources.",
         })
 
@@ -383,7 +392,10 @@ def generate_fix_suggestions(
                 "severity": "INFO",
                 "category": "SEO",
                 "title": "Optimize Title Tag Length",
-                "description": f"Title tag length is {title_len} characters. Recommended target is 30 to 60 characters.",
+                "description": (
+                    f"Title tag length is {title_len} characters."
+                    " Recommended target is 30 to 60 characters."
+                ),
                 "recommendation": "Adjust page title text to fit standard search snippet displays (30–60 characters).",
             })
 
@@ -497,4 +509,3 @@ def run_check(url: str, request_id: str) -> dict:
     )
 
     return result
-

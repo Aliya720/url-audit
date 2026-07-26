@@ -68,4 +68,3 @@ def set_cached_audit(normalized_url: str, result: dict) -> None:
         )
     except Exception as e:
         logger.warning("cache_set_error", extra={"error": str(e)[:200]})
-

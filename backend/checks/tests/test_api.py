@@ -2,16 +2,15 @@
 # TRD §12: DRF APIClient, responses to stub outbound requests
 # FR-9: at least one test per error code in TRD §5
 
-import json
 from datetime import datetime, timezone
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 import pytest
 import responses
 from django.test import override_settings
 from rest_framework.test import APIClient
 
-from checks.models import Audit, Monitor
+from checks.models import Audit
 
 
 import secrets
@@ -240,7 +239,7 @@ class TestRateLimiting:
         """429 RATE_LIMITED after exceeding burst limit."""
         # Exhaust the burst allowance
         for i in range(5):
-            resp = api_client.post(
+            api_client.post(
                 "/api/audits",
                 {"url": "not-valid"},  # will fail on validation but still counts against throttle
                 format="json",

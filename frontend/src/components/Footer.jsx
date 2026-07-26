@@ -5,7 +5,7 @@ function Footer() {
     <footer className="site-footer" id="footer">
       <div className="footer-container">
         <div className="footer-left">
-          <span className="footer-brand">SiteGuard</span>
+          <span className="footer-brand">PulseWatch</span>
           <span className="footer-divider">•</span>
           <span className="footer-copy">Enterprise Web Intelligence & Uptime Diagnostics</span>
         </div>

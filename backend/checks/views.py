@@ -14,7 +14,6 @@ from .exceptions import (
     AuditNotFound,
     MonitorNotFound,
     ServiceBusy,
-    InternalError,
     IntervalTooShort,
 )
 from .middleware import get_current_request_id
@@ -179,7 +178,6 @@ class HealthCheckView(APIView):
     throttle_classes = []
 
     def get(self, request):
-        import time as _time
 
         from django.core.cache import cache
         from django.db import connection
@@ -530,4 +528,3 @@ class MonitorAlertsView(APIView):
             },
             status=status.HTTP_200_OK,
         )
-

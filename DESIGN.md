@@ -1,4 +1,4 @@
-# SiteGuard - Audit & Trust System Design Specification
+# PulseWatch - Audit & Trust System Design Specification
 
 ---
 name: Audit & Trust System

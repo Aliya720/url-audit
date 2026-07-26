@@ -1,14 +1,12 @@
 # Celery Tasks — TRD §10 / FR-11–FR-14
 # Scheduled monitor checks, reusing the Check engine (FR-12 — no duplicated logic)
 
-import json
 import logging
 from datetime import datetime, timedelta, timezone
 
 import requests as http_requests
 from celery import shared_task
 from django.conf import settings
-from tenacity import retry, stop_after_attempt, wait_exponential
 
 from .engine import run_check
 from .exceptions import TargetTimeout, TargetUnreachable, URLNotAllowed
@@ -174,7 +172,7 @@ def run_monitor_check(self, monitor_id: str):
     except URLNotAllowed:
         new_state = "DOWN"
         error_code = "URL_NOT_ALLOWED"
-    except Exception as e:
+    except Exception:
         new_state = "DOWN"
         error_code = "INTERNAL_ERROR"
         logger.exception(

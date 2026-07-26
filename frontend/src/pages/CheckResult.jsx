@@ -1,5 +1,5 @@
 /**
- * Check Result screen — SiteGuard Audit Report Specification
+ * Check Result screen — PulseWatch Audit Report Specification
  * Four audit cards (Availability, Performance, SEO, Security), cache status badge,
  * monospaced technical output, and "Monitor this site" CTA
  */

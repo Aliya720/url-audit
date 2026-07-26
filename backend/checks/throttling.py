@@ -79,7 +79,6 @@ class PulseWatchThrottle(BaseThrottle):
         except Exception:
             return True
 
-
     def wait(self):
         """Return seconds until next token is available (for Retry-After header)."""
         return getattr(self, "wait_time", None)

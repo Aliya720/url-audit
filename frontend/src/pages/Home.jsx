@@ -1,5 +1,5 @@
 /**
- * Home / Check screen — UI/UX Brief §2 & SiteGuard Design Spec
+ * Home / Check screen — UI/UX Brief §2 & PulseWatch Design Spec
  * Instant URL health check form + Bento Grid feature highlights + Dashboard preview
  */
 import { useState } from 'react'
