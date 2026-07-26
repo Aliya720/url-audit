@@ -404,7 +404,9 @@ def generate_fix_suggestions(
                     "description": (
                         f"Title tag length is {title_len} characters." " Recommended target is 30 to 60 characters."
                     ),
-                    "recommendation": "Adjust page title text to fit standard search snippet displays (30–60 characters).",
+                    "recommendation": (
+                        "Adjust page title text to fit standard search" " snippet displays (30–60 characters)."
+                    ),
                 }
             )
 
