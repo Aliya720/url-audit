@@ -20,10 +20,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Collect static files
-RUN python manage.py collectstatic --noinput 2>/dev/null || true
+# Make entrypoint script executable
+RUN chmod +x /app/entrypoint.sh
 
 EXPOSE 8000
 
+ENTRYPOINT ["/app/entrypoint.sh"]
+
 # Default command — overridden in docker-compose for worker/beat
-CMD ["gunicorn", "pulsewatch.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4", "--timeout", "30"]
+CMD ["gunicorn", "pulsewatch.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2", "--threads", "2", "--timeout", "60"]
+

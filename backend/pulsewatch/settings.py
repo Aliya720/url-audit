@@ -9,6 +9,18 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Environment parsing (TRD §1.1 — django-environ)
+import sys
+
+IS_TESTING = (
+    "pytest" in sys.modules
+    or "conftest" in sys.modules
+    or any("pytest" in str(arg).lower() for arg in sys.argv)
+    or os.environ.get("PYTEST_CURRENT_TEST") is not None
+)
+
+if IS_TESTING:
+    os.environ["DATABASE_URL"] = ""
+
 env = environ.Env(
     DEBUG=(bool, False),
     ALLOWED_HOSTS=(list, ["*"]),
@@ -31,6 +43,9 @@ env = environ.Env(
 for env_path in [BASE_DIR / ".env", BASE_DIR.parent / ".env"]:
     if env_path.exists():
         environ.Env.read_env(str(env_path), overwrite=False)
+
+if IS_TESTING:
+    os.environ["DATABASE_URL"] = ""
 
 # Security
 SECRET_KEY = env("DJANGO_SECRET_KEY", default="django-insecure-pulsewatch-dev-secret-key-change-me")
@@ -83,8 +98,11 @@ TEMPLATES = [
 WSGI_APPLICATION = "pulsewatch.wsgi.application"
 
 # Database — PostgreSQL in docker/prod, SQLite fallback for local dev/testing
+import sys
+
+IS_TESTING = "pytest" in sys.modules or "test" in sys.argv
 db_url = os.environ.get("DATABASE_URL", "")
-if db_url:
+if db_url and not IS_TESTING:
     DATABASES = {"default": env.db("DATABASE_URL")}
 else:
     DATABASES = {
@@ -96,7 +114,7 @@ else:
 
 # Redis — Cache + Throttle + Broker (TRD §1)
 REDIS_URL = os.environ.get("REDIS_URL", "").strip()
-if REDIS_URL and REDIS_URL.startswith("redis://"):
+if REDIS_URL and REDIS_URL.startswith("redis://") and not IS_TESTING:
     CACHES = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",

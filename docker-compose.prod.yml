@@ -58,10 +58,9 @@ services:
     command: >
       gunicorn pulsewatch.wsgi:application
       --bind 0.0.0.0:8000
-      --worker-class gevent
-      --workers 4
-      --worker-connections 250
-      --timeout 30
+      --workers 2
+      --threads 2
+      --timeout 60
       --access-logfile -
       --error-logfile -
     env_file: .env
@@ -76,7 +75,7 @@ services:
 
   worker:
     build: ./backend
-    command: celery -A pulsewatch worker -l info --concurrency=4
+    command: celery -A pulsewatch worker -l info --concurrency=2
     env_file: .env
     depends_on:
       db:
@@ -98,6 +97,7 @@ services:
 
   db:
     image: postgres:16
+    command: postgres -c shared_buffers=64MB -c max_connections=50
     volumes:
       - pgdata:/var/lib/postgresql/data
     env_file: .env
@@ -115,6 +115,7 @@ services:
 
   redis:
     image: redis:7
+    command: redis-server --maxmemory 64mb --maxmemory-policy allkeys-lru
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
