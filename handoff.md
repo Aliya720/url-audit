@@ -16,7 +16,7 @@ PulseWatch is a production-ready URL health audit & monitoring service built wit
 - [x] Background check execution, state machine (`UP`/`DOWN`/`DEGRADED`), and webhook alert POSTs
 - [x] Bounded history retrievable per monitor (`GET /api/monitors/{id}/history`, max 50 rows)
 - [x] React single-page UI (5 screens: Home, Result, Register, My Monitors, Detail)
-- [x] Footer credit line ("Built for Digital Heroes Training Task" linked to `https://digitalheroesco.com`)
+
 - [x] 74/74 passing automated tests in pytest suite
 - [x] GitHub Actions CI workflow (`.github/workflows/ci.yml`)
 - [x] Multi-container Docker Compose configuration (`docker-compose.yml`, `docker-compose.prod.yml`)

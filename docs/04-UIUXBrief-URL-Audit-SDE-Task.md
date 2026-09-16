@@ -30,9 +30,7 @@ This turns App Flow's five screens into actual layout, component, and interactio
 ### 1.2 Footer — Required, Non-Negotiable
 Exact copy and behavior, per the task brief's Live Build Requirement:
 
-```
-Built for Digital Heroes Training Task
-```
+
 - Hyperlinked to `https://digitalheroesco.com`
 - Visible on every screen, not just Home — this is how the evaluator verifies the build
 - Not dismissible, not below-the-fold in a way that requires scrolling to notice (footer of a short page is fine; don't bury it in a long scroll on a data-heavy screen like Monitor Detail)
@@ -58,7 +56,6 @@ Per App Flow §0.1, the `X-Client-Key` header is generated once on first visit a
 │   [inline error message appears here, if any] │
 │                                                │
 ├──────────────────────────────────────────────┤
-│  Built for Digital Heroes Training Task        │
 └──────────────────────────────────────────────┘
 ```
 
@@ -94,7 +91,7 @@ Per App Flow §0.1, the `X-Client-Key` header is generated once on first visit a
 │                                                │
 │  [ Monitor this URL instead → ]                │
 ├──────────────────────────────────────────────┤
-│  Built for Digital Heroes Training Task        │
+│           │
 └──────────────────────────────────────────────┘
 ```
 
@@ -129,7 +126,7 @@ Per App Flow §0.1, the `X-Client-Key` header is generated once on first visit a
 │                                                │
 │              [ Start Monitoring ]               │
 ├──────────────────────────────────────────────┤
-│  Built for Digital Heroes Training Task        │
+│           │
 └──────────────────────────────────────────────┘
 ```
 
@@ -157,7 +154,7 @@ Per App Flow §0.1, the `X-Client-Key` header is generated once on first visit a
 │  │ ◐ PENDING  new-site.com       just added │  │
 │  └────────────────────────────────────────┘  │
 ├──────────────────────────────────────────────┤
-│  Built for Digital Heroes Training Task        │
+│           │
 └──────────────────────────────────────────────┘
 ```
 
@@ -189,7 +186,7 @@ That second line is the one honest disclosure needed given the no-auth design (A
 │  10:05:04  ● UP    205ms                         │
 │  ...                                            │
 ├──────────────────────────────────────────────┤
-│  Built for Digital Heroes Training Task        │
+│           │
 └──────────────────────────────────────────────┘
 ```
 

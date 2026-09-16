@@ -103,4 +103,4 @@ curl -f http://localhost/api/health
 - [x] Celery worker & django-celery-beat scheduling active
 - [x] Structured JSON logging with request ID propagation
 - [x] Health check endpoint (`/api/health`) verified
-- [x] Required footer credit line ("Built for Digital Heroes Training Task") verified in React UI
+- [x] Required footer credit line (" ") verified in React UI

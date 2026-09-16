@@ -27,4 +27,4 @@ The PulseWatch URL Health Audit & Monitoring Service is fully built, tested, and
 3. **Structured Logging & Exception Handling**: 100% of non-2xx responses mapped to custom error catalog; `X-Request-Id` propagation.
 4. **State Machine & Webhook Delivery**: Monitor state machine (`PENDING_FIRST_CHECK` → `UP` / `DOWN` / `DEGRADED`) with state-change webhook POSTs.
 5. **Bounded Storage**: Prune-on-write pattern for `monitor_checks` enforcing flat storage footprint.
-6. **Required Footer Credit**: Visible link to `https://digitalheroesco.com` ("Built for Digital Heroes Training Task").
+

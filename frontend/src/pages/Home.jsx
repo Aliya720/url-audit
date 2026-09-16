@@ -114,7 +114,7 @@ function Home() {
       </section>
 
       {/* Corporate Partners Bar */}
-      <section className="social-proof-bar">
+      {/* <section className="social-proof-bar">
         <p className="font-label-caps text-outline proof-title">POWERING GLOBAL INFRASTRUCTURE FOR</p>
         <div className="proof-logos">
           <span>TechFlow</span>
@@ -123,7 +123,7 @@ function Home() {
           <span>CloudOps</span>
           <span>SecureNet</span>
         </div>
-      </section>
+      </section> */}
 
       {/* Features Bento Grid */}
       <section className="bento-section" id="features">

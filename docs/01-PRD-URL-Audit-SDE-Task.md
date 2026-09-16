@@ -202,7 +202,6 @@ Not specified at requirement level in this doc — deliberately left as roadmap 
 ## 8. Live Build Requirements (Non-negotiable per brief)
 
 - Publicly accessible live URL
-- Visible footer: **"Built for Digital Heroes Training Task"**, hyperlinked to `digitalheroesco.com`
 - Public GitHub repo containing tests + CI config
 - README with the full API contract
 - Submission includes the live URL, per the brief's submission instructions

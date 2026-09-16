@@ -9,17 +9,7 @@ function Footer() {
           <span className="footer-divider">•</span>
           <span className="footer-copy">Enterprise Web Intelligence & Uptime Diagnostics</span>
         </div>
-        <div className="footer-right">
-          <a
-            href="https://digitalheroesco.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="footer-link"
-            id="footer-credit-link"
-          >
-            Built for Digital Heroes Training Task
-          </a>
-        </div>
+       
       </div>
     </footer>
   )
